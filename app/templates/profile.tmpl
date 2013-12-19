@@ -48,18 +48,21 @@
 				{{ profile_user.first_name }} {{ profile_user.last_name }}
 			{% endif %}<br>
 
-			<!-- Name: 
+
+			Xbox Live: 
 			{% if profile_user.id == user.id %}
-				<span id="output_edit_name_wrapper">{% if profile_user.first_name or profile_user.last_name %}{{ profile_user.first_name }} {{ profile_user.last_name }}{% else %}n/a{% endif %}
-				</span>
-				<span id="input_edit_name_wrapper">
-					<input type="text" placeholder="First Name" id="input_first_name" maxlength="20" value="{{ profile_user.first_name }}"> 
-					<input type="text" placeholder="Last Name" id="input_last_name" maxlength="20" value="{{ profile_user.last_name }}"> <a id="input_edit_name_cancel">cancel</a>
-				</span>
-				<button id="input_edit_name">Edit Name</button><br>
+				<span id="output_edit_user_xbox_wrapper">{% if profile_user.ext.user_xbox %}{{ profile_user.ext.user_xbox }}{% else %}n/a{% endif %}</span><span id="input_edit_user_xbox_wrapper"><input type="text" size="60" placeholder="Xbox Live Account" id="input_user_xbox" value="{{ profile_user.ext.user_xbox }}"> <a id="input_edit_user_xbox_cancel">cancel</a></span>
+				<button id="input_edit_user_xbox">Edit Xbox Live Account</button><br>
 			{% else %}
-				{{ profile_user.first_name }} {{ profile_user.last_name }}
-			{% endif %}<br> -->
+				{{ profile_user.ext.user_xbox }}
+			{% endif %}<br>
+			Steam Account: 
+			{% if profile_user.id == user.id %}
+				<span id="output_edit_user_steam_wrapper">{% if profile_user.ext.user_steam %}{{ profile_user.ext.user_steam }}{% else %}n/a{% endif %}</span><span id="input_edit_user_steam_wrapper"><input type="text" size="60" placeholder="Xbox Live Account" id="input_user_steam" value="{{ profile_user.ext.user_steam }}"> <a id="input_edit_user_steam_cancel">cancel</a></span>
+				<button id="input_edit_user_steam">Edit Steam Account</button><br>
+			{% else %}
+				{{ profile_user.ext.user_steam }}
+			{% endif %}<br>
 
 			Email: 
 			{% if profile_user.id == user.id %}
@@ -68,7 +71,7 @@
 				{{ profile_user.email }}
 			{% endif %}<br>
 			
-			Last Logged on: {{ profile_user.last_login }}<br>
+			Last Logged on: {{ profile_user.last_login }}<br><br>
 			
 			Bio: 
 			{% if profile_user.id == user.id %}

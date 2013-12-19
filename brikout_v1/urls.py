@@ -42,7 +42,7 @@ urlpatterns = patterns('',
     url(r'^api01/call/games/$', 'app.views.api_call_games'),
 
     # Creating fake data
-    url(r'^qwertyytrewq/users$', 'app.views.api_create_fake_users'),
+    url(r'^qwertyytrewq/users/$', 'app.views.api_create_fake_users'),
     url(r'^qwertyytrewq/systems/$', 'app.views.api_call_systems'),
     url(r'^qwertyytrewq/games/$', 'app.views.api_call_games'),
     url(r'^qwertyytrewq/ignrss/$', 'app.views.api_call_ign_rss_feed'),

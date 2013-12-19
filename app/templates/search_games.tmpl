@@ -61,7 +61,7 @@
 						<option value='rating'>Rating</option>
 					</select><br>
 		</div>
-		<label>Results per page: </label><select id="input_page_size">
+		Results per page: <select id="input_page_size">
 			<option value="10">10</option>
 			<option value="20">20</option>
 			<option value="40">40</option>
@@ -78,7 +78,7 @@
 					<div class="floater my_inner_container">
 						<div class="floater_container">
 								<a href="{% url 'app.views.view_game' g.id %}"><img src="http://thegamesdb.net/banners/{{ g.url_image_cover }}" height="80px" width="auto" class="left">
-								{{ g.name }}</a>
+								 {{ g.name }}</a>
 						</div>
 						
 						ESRB: {% if g.esrb %}{{ g.esrb.code }}{% else %}n/a{% endif %}<br>

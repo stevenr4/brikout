@@ -24,6 +24,8 @@ $(document).ready(function(){
         $("#input_edit_name_wrapper").hide();
         $("#input_edit_email_wrapper").hide();
         $("#input_edit_bio_wrapper").hide();
+        $("#input_edit_user_xbox_wrapper").hide();
+        $("#input_edit_user_steam_wrapper").hide();
     }
 
     hide_all_editables();
@@ -76,6 +78,36 @@ $(document).ready(function(){
             success: function(data){
                 if(data.success == true){
                     $("#input_add_buddy").text("You have sent a buddy invite!");
+                }
+            },
+            error: function(xhr, text, errorScript){
+                console.log("Failure attempting to leave event.");
+                console.log(text);
+                console.log(errorScript);
+                $("#output_message").text("Something went wrong, notify server admin and try again.");
+                $("#input_leave").prop('disabled',false);
+            }
+        });
+    });
+
+
+    $("#input_remove_buddy").on('click',function(){
+
+        $("input_remove_buddy").prop('disabled',true);
+
+        $.ajax({
+            type: "POST",
+            url: '/api01/user/buddies/',
+            dataType: 'json',
+            data: {
+                'user_id': user_id,
+                'buddy_id': profile_id,
+                'unbuddy': true
+            },
+            success: function(data){
+                console.log(data);
+                if(data.success == true){
+                    $("#input_remove_buddy").text("You have successfully un-buddied");
                 }
             },
             error: function(xhr, text, errorScript){
@@ -296,6 +328,138 @@ $(document).ready(function(){
         }
 
     });
+
+    var user_xbox_editing = false;
+    $("#input_edit_user_xbox_cancel").on("click",function(){
+        user_xbox_editing = false;
+        $("#output_edit_user_xbox_wrapper").show(300);
+        $("#input_edit_user_xbox_wrapper").hide(300);
+        $("#input_edit_user_xbox").text("Edit Xbox Live Account");
+    });
+
+    $("#input_edit_user_xbox").on("click",function(){
+        if(user_xbox_editing == false){
+            user_xbox_editing = true;
+            $("#output_edit_user_xbox_wrapper").prop('disabled',false);
+            $("#input_edit_user_xbox_wrapper").prop('disabled',false);
+            $("#output_edit_user_xbox_wrapper").hide(300);
+            $("#input_edit_user_xbox_wrapper").show(300);
+            $("#input_edit_user_xbox").text("Save Changes");
+
+        }else{
+            $("#output_edit_user_xbox_wrapper").prop('disabled',true);
+            $("#input_edit_user_xbox_wrapper").prop('disabled',true);
+            $("#input_edit_user_xbox").text("Saving...");
+            $("#input_edit_user_xbox").prop('disabled',true);
+
+            var user_xbox = $("#input_user_xbox").val()
+
+            data_to_send = {
+                'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
+                'user_xbox': user_xbox
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/api01/user/',
+                dataType: 'json',
+                data:data_to_send,
+                success: function(g){
+                    console.log(g);
+                    console.log("SUCCESS!!!");
+                    if(g['success'] == true){
+                        activate_all();
+                        $("#input_edit_user_xbox").text("Changes Saved, Edit Again");
+                        $("#input_edit_user_xbox").prop('disabled',false);
+
+                        $("#output_edit_user_xbox_wrapper").text(user_xbox);
+
+                        $("#output_edit_user_xbox_wrapper").show(300);
+                        $("#input_edit_user_xbox_wrapper").hide(300);
+                        user_xbox_editing = false;
+                    }else{
+                        $("#input_edit_user_xbox").text("Failed to Save");
+                        $("#input_edit_user_xbox").prop('disabled',false);
+                    }
+                },
+                error: function(xhr, text, errorScript){
+                    console.log("Failure attempting to save changes.");
+                    console.log(text);
+                    console.log(errorScript);
+                    activate_all();
+                    $("#input_save_changes").text("Error");
+                }
+            });
+        }
+
+    });
+
+
+    var user_steam_editing = false;
+    $("#input_edit_user_steam_cancel").on("click",function(){
+        user_steam_editing = false;
+        $("#output_edit_user_steam_wrapper").show(300);
+        $("#input_edit_user_steam_wrapper").hide(300);
+        $("#input_edit_user_steam").text("Edit Steam Account");
+    });
+
+    $("#input_edit_user_steam").on("click",function(){
+        if(user_steam_editing == false){
+            user_steam_editing = true;
+            $("#output_edit_user_steam_wrapper").prop('disabled',false);
+            $("#input_edit_user_steam_wrapper").prop('disabled',false);
+            $("#output_edit_user_steam_wrapper").hide(300);
+            $("#input_edit_user_steam_wrapper").show(300);
+            $("#input_edit_user_steam").text("Save Changes");
+
+        }else{
+            $("#output_edit_user_steam_wrapper").prop('disabled',true);
+            $("#input_edit_user_steam_wrapper").prop('disabled',true);
+            $("#input_edit_user_steam").text("Saving...");
+            $("#input_edit_user_steam").prop('disabled',true);
+
+            var user_steam = $("#input_user_steam").val()
+
+            data_to_send = {
+                'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
+                'user_steam': user_steam
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/api01/user/',
+                dataType: 'json',
+                data:data_to_send,
+                success: function(g){
+                    console.log(g);
+                    console.log("SUCCESS!!!");
+                    if(g['success'] == true){
+                        activate_all();
+                        $("#input_edit_user_steam").text("Changes Saved, Edit Again");
+                        $("#input_edit_user_steam").prop('disabled',false);
+
+                        $("#output_edit_user_steam_wrapper").text(user_steam);
+
+                        $("#output_edit_user_steam_wrapper").show(300);
+                        $("#input_edit_user_steam_wrapper").hide(300);
+                        user_steam_editing = false;
+                    }else{
+                        $("#input_edit_user_steam").text("Failed to Save");
+                        $("#input_edit_user_steam").prop('disabled',false);
+                    }
+                },
+                error: function(xhr, text, errorScript){
+                    console.log("Failure attempting to save changes.");
+                    console.log(text);
+                    console.log(errorScript);
+                    activate_all();
+                    $("#input_save_changes").text("Error");
+                }
+            });
+        }
+
+    });
+
 
     // $("#input_save_changes").on("click",function(){
 

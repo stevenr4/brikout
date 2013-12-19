@@ -112,7 +112,7 @@ def main(request):
 	# Print that somebody is trying to access the main page
 	print "Starting 'app.views.main'..."
 
-	news = News.objects.all()
+	news = News.objects.all()[:6]
 
 	# Return the rendered tmpl
 	return render(request, "main.tmpl",{"news":news})
@@ -985,14 +985,27 @@ def api_user_buddies(request):
 				# Get the buddy ID so we can add them together
 				b = get_object_or_404(User, pk=request.POST['buddy_id'])
 
-				# Add him to the buddies 
-				u.ext.buddies.add(b.ext)
+				# A small variable to hold a string so we know what happened
+				what_happened = ""
+
+				# Now we see if we're adding or removing
+				if 'unbuddy' in request.POST:
+
+					# The unbuddy tag means we're removing this buddy from the list
+					u.ext.buddies.remove(b.ext)
+					
+					what_happened = "removed"
+				else:
+					# Add him to the buddies 
+					u.ext.buddies.add(b.ext)
+
+					what_happened = "added"
 
 				# Save everything, just to be sure
 				u.ext.save()
 
 				# Return the success json
-				return HttpResponse(simplejson.dumps({'success':True,'reason':"The user " + u.username + " has added " + b.username + " to their buddies list."}), mimetype='application/javascript')
+				return HttpResponse(simplejson.dumps({'success':True,'reason':"The user " + u.username + " has " + what_happened + " " + b.username + " to/from their buddies list."}), mimetype='application/javascript')
 
 	return HttpResponse(simplejson.dumps({'success':False,'reason':"The method used was not POST or GET"}), mimetype='application/javascript')
 
