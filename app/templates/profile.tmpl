@@ -37,20 +37,33 @@
 		<p>
 			Name: 
 			{% if profile_user.id == user.id %}
-				<span id="output_edit_name_wrapper">{{ profile_user.first_name }} {{ profile_user.last_name }}
+				<span id="output_edit_name_wrapper">{% if profile_user.first_name or profile_user.last_name %}{{ profile_user.first_name }} {{ profile_user.last_name }}{% else %}n/a{% endif %}
 				</span>
 				<span id="input_edit_name_wrapper">
 					<input type="text" placeholder="First Name" id="input_first_name" maxlength="20" value="{{ profile_user.first_name }}"> 
-					<input type="text" placeholder="Last Name" id="input_last_name" maxlength="20" value="{{ profile_user.last_name }}">
+					<input type="text" placeholder="Last Name" id="input_last_name" maxlength="20" value="{{ profile_user.last_name }}"> <a id="input_edit_name_cancel">cancel</a>
 				</span>
-				<button id="input_edit_name">Edit Username</button><br>
+				<button id="input_edit_name">Edit Name</button><br>
 			{% else %}
 				{{ profile_user.first_name }} {{ profile_user.last_name }}
 			{% endif %}<br>
 
+			<!-- Name: 
+			{% if profile_user.id == user.id %}
+				<span id="output_edit_name_wrapper">{% if profile_user.first_name or profile_user.last_name %}{{ profile_user.first_name }} {{ profile_user.last_name }}{% else %}n/a{% endif %}
+				</span>
+				<span id="input_edit_name_wrapper">
+					<input type="text" placeholder="First Name" id="input_first_name" maxlength="20" value="{{ profile_user.first_name }}"> 
+					<input type="text" placeholder="Last Name" id="input_last_name" maxlength="20" value="{{ profile_user.last_name }}"> <a id="input_edit_name_cancel">cancel</a>
+				</span>
+				<button id="input_edit_name">Edit Name</button><br>
+			{% else %}
+				{{ profile_user.first_name }} {{ profile_user.last_name }}
+			{% endif %}<br> -->
+
 			Email: 
 			{% if profile_user.id == user.id %}
-				<input type="email" size="60" placeholder="email" id="input_email" value="{{ profile_user.email }}"><br>
+				<span id="output_edit_email_wrapper">{{ profile_user.email }}</span><span id="input_edit_email_wrapper"><input type="email" size="60" placeholder="email" id="input_email" value="{{ profile_user.email }}"> <a id="input_edit_email_cancel">cancel</a></span> <button id="input_edit_email">Edit Email</button><br>
 			{% else %}
 				{{ profile_user.email }}
 			{% endif %}<br>
@@ -59,8 +72,8 @@
 			
 			Bio: 
 			{% if profile_user.id == user.id %}
-				<textarea cols="60" rows="5" id="input_bio" maxlength="500">{{ profile_user.ext.bio }}</textarea>  
-				<button id="input_save_changes">Save All Changes</button><br>
+				<span id="output_edit_bio_wrapper">{% if profile_user.ext.bio %}{{ profile_user.ext.bio }}{% else %}n/a{% endif %}</span><span id="input_edit_bio_wrapper"><textarea cols="60" rows="5" id="input_bio" maxlength="500">{{ profile_user.ext.bio }}</textarea> <a id="input_edit_bio_cancel">cancel</a></span>
+				<button id="input_edit_bio">Edit Bio</button><br>
 			{% else %}
 				{{ profile_user.ext.bio }}
 			{% endif %}<br><br>

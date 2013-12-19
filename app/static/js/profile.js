@@ -21,9 +21,12 @@ $(document).ready(function(){
     }
 
     function hide_all_editables(){
-        $("#output_edit_name_wrapper").show();
         $("#input_edit_name_wrapper").hide();
+        $("#input_edit_email_wrapper").hide();
+        $("#input_edit_bio_wrapper").hide();
     }
+
+    hide_all_editables();
 
     $(".input_remove_game").on('click',function(){
         
@@ -86,68 +89,262 @@ $(document).ready(function(){
     });
 
 
-    $("input").on('keydown',function(){
-        $("#input_save_changes").text("Save Changes");
-        $("#input_save_changes").prop('disabled',false);
-        $("#input_save_changes").show(300);
+    // $("input").on('keydown',function(){
+    //     $("#input_save_changes").text("Save Changes");
+    //     $("#input_save_changes").prop('disabled',false);
+    //     $("#input_save_changes").show(300);
+    // });
+    // $("textarea").on('keydown', function(){
+    //     $("#input_save_changes").text("Save Changes");
+    //     $("#input_save_changes").prop('disabled',false);
+    //     $("#input_save_changes").show(300);
+    // });
+    var name_editing = false;
+    $("#input_edit_name_cancel").on("click",function(){
+        name_editing = false;
+        $("#output_edit_name_wrapper").show(300);
+        $("#input_edit_name_wrapper").hide(300);
+        $("#input_edit_name").text("Edit Name");
     });
-    $("textarea").on('keydown', function(){
-        $("#input_save_changes").text("Save Changes");
-        $("#input_save_changes").prop('disabled',false);
-        $("#input_save_changes").show(300);
-    });
+    $("#input_edit_name").on("click",function(){
+        if(name_editing == false){
+            name_editing = true;
+            $("#output_edit_name_wrapper").prop('disabled',false);
+            $("#input_edit_name_wrapper").prop('disabled',false);
+            $("#output_edit_name_wrapper").hide(300);
+            $("#input_edit_name_wrapper").show(300);
+            $("#input_edit_name").text("Save Changes");
 
+        }else{
+            $("#output_edit_name_wrapper").prop('disabled',true);
+            $("#input_edit_name_wrapper").prop('disabled',true);
+            $("#input_edit_name").text("Saving...");
+            $("#input_edit_name").prop('disabled',true);
 
+            var first_name = $("#input_first_name").val()
+            var last_name = $("#input_last_name").val();
 
+            data_to_send = {
+                'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
+                'first_name': first_name,
+                'last_name': last_name
+            }
 
-    $("#input_save_changes").on("click",function(){
+            $.ajax({
+                type: "POST",
+                url: '/api01/user/',
+                dataType: 'json',
+                data:data_to_send,
+                success: function(g){
+                    console.log(g);
+                    console.log("SUCCESS!!!");
+                    if(g['success'] == true){
+                        activate_all();
+                        $("#input_edit_name").text("Changes Saved, Edit Again");
+                        $("#input_edit_name").prop('disabled',false);
 
-        var first_name = $("#input_first_name").val()
-        var last_name = $("#input_last_name").val();
-        var email = $("#input_email").val();
-        var bio = $("#input_bio").val();
+                        $("#output_edit_name_wrapper").text(first_name + " " + last_name);
 
-        // VALIDATE EMAIL
-
-        data_to_send = {
-            'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
-            'first_name': first_name,
-            'last_name': last_name,
-            'email': email,
-            'bio': bio
+                        $("#output_edit_name_wrapper").show(300);
+                        $("#input_edit_name_wrapper").hide(300);
+                        name_editing = false;
+                    }else{
+                        $("#input_edit_name").text("Failed to Save");
+                        $("#input_edit_name").prop('disabled',false);
+                    }
+                },
+                error: function(xhr, text, errorScript){
+                    console.log("Failure attempting to save changes.");
+                    console.log(text);
+                    console.log(errorScript);
+                    activate_all();
+                    $("#input_save_changes").text("Error");
+                }
+            });
         }
 
+    });
 
 
-        deactivate_all();
+    var email_editing = false;
+    $("#input_edit_email_cancel").on("click",function(){
+        email_editing = false;
+        $("#output_edit_email_wrapper").show(300);
+        $("#input_edit_email_wrapper").hide(300);
+        $("#input_edit_email").text("Edit Email");
+    });
+
+    $("#input_edit_email").on("click",function(){
+        if(email_editing == false){
+            email_editing = true;
+            $("#output_edit_email_wrapper").prop('disabled',false);
+            $("#input_edit_email_wrapper").prop('disabled',false);
+            $("#output_edit_email_wrapper").hide(300);
+            $("#input_edit_email_wrapper").show(300);
+            $("#input_edit_email").text("Save Changes");
+
+        }else{
+            $("#output_edit_email_wrapper").prop('disabled',true);
+            $("#input_edit_email_wrapper").prop('disabled',true);
+            $("#input_edit_email").text("Saving...");
+            $("#input_edit_email").prop('disabled',true);
+
+            var email = $("#input_email").val()
+
+            data_to_send = {
+                'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
+                'email': email
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/api01/user/',
+                dataType: 'json',
+                data:data_to_send,
+                success: function(g){
+                    console.log(g);
+                    console.log("SUCCESS!!!");
+                    if(g['success'] == true){
+                        activate_all();
+                        $("#input_edit_email").text("Changes Saved, Edit Again");
+                        $("#input_edit_email").prop('disabled',false);
+
+                        $("#output_edit_email_wrapper").text(email);
+
+                        $("#output_edit_email_wrapper").show(300);
+                        $("#input_edit_email_wrapper").hide(300);
+                        email_editing = false;
+                    }else{
+                        $("#input_edit_email").text("Failed to Save");
+                        $("#input_edit_email").prop('disabled',false);
+                    }
+                },
+                error: function(xhr, text, errorScript){
+                    console.log("Failure attempting to save changes.");
+                    console.log(text);
+                    console.log(errorScript);
+                    activate_all();
+                    $("#input_save_changes").text("Error");
+                }
+            });
+        }
+
+    });
+
+
+    var bio_editing = false;
+    $("#input_edit_bio_cancel").on("click",function(){
+        bio_editing = false;
+        $("#output_edit_bio_wrapper").show(300);
+        $("#input_edit_bio_wrapper").hide(300);
+        $("#input_edit_bio").text("Edit Bio");
+    });
+
+    $("#input_edit_bio").on("click",function(){
+        if(bio_editing == false){
+            bio_editing = true;
+            $("#output_edit_bio_wrapper").prop('disabled',false);
+            $("#input_edit_bio_wrapper").prop('disabled',false);
+            $("#output_edit_bio_wrapper").hide(300);
+            $("#input_edit_bio_wrapper").show(300);
+            $("#input_edit_bio").text("Save Changes");
+
+        }else{
+            $("#output_edit_bio_wrapper").prop('disabled',true);
+            $("#input_edit_bio_wrapper").prop('disabled',true);
+            $("#input_edit_bio").text("Saving...");
+            $("#input_edit_bio").prop('disabled',true);
+
+            var bio = $("#input_bio").val()
+
+            data_to_send = {
+                'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
+                'bio': bio
+            }
+
+            $.ajax({
+                type: "POST",
+                url: '/api01/user/',
+                dataType: 'json',
+                data:data_to_send,
+                success: function(g){
+                    console.log(g);
+                    console.log("SUCCESS!!!");
+                    if(g['success'] == true){
+                        activate_all();
+                        $("#input_edit_bio").text("Changes Saved, Edit Again");
+                        $("#input_edit_bio").prop('disabled',false);
+
+                        $("#output_edit_bio_wrapper").text(bio);
+
+                        $("#output_edit_bio_wrapper").show(300);
+                        $("#input_edit_bio_wrapper").hide(300);
+                        bio_editing = false;
+                    }else{
+                        $("#input_edit_bio").text("Failed to Save");
+                        $("#input_edit_bio").prop('disabled',false);
+                    }
+                },
+                error: function(xhr, text, errorScript){
+                    console.log("Failure attempting to save changes.");
+                    console.log(text);
+                    console.log(errorScript);
+                    activate_all();
+                    $("#input_save_changes").text("Error");
+                }
+            });
+        }
+
+    });
+
+    // $("#input_save_changes").on("click",function(){
+
+    //     var first_name = $("#input_first_name").val()
+    //     var last_name = $("#input_last_name").val();
+    //     var email = $("#input_email").val();
+    //     var bio = $("#input_bio").val();
+
+    //     // VALIDATE EMAIL
+
+    //     data_to_send = {
+    //         'user_id':user_id, ///////////////// PASSED THROUGH BY TEMPLATE
+    //         'first_name': first_name,
+    //         'last_name': last_name,
+    //         'email': email,
+    //         'bio': bio
+    //     }
+
+
+
+    //     deactivate_all();
 
 
         
-        $.ajax({
-            type: "POST",
-            url: '/api01/user/',
-            dataType: 'json',
-            data:data_to_send,
-            success: function(g){
-                console.log(g);
-                console.log("SUCCESS!!!");
-                if(g['success'] == true){
-                    activate_all();
-                    $("#input_save_changes").text("Changes Saved");
-                    $("#input_save_changes").prop('disabled',true);
+    //     $.ajax({
+    //         type: "POST",
+    //         url: '/api01/user/',
+    //         dataType: 'json',
+    //         data:data_to_send,
+    //         success: function(g){
+    //             console.log(g);
+    //             console.log("SUCCESS!!!");
+    //             if(g['success'] == true){
+    //                 activate_all();
+    //                 $("#input_save_changes").text("Changes Saved");
+    //                 $("#input_save_changes").prop('disabled',true);
 
-                }else{
-                    activate_all();
-                    $("#input_save_changes").text("Failed to Save");
-                }
-            },
-            error: function(xhr, text, errorScript){
-                console.log("Failure attempting to save changes.");
-                console.log(text);
-                console.log(errorScript);
-                activate_all();
-                $("#input_save_changes").text("Error");
-            }
-        });
-    });
+    //             }else{
+    //                 activate_all();
+    //                 $("#input_save_changes").text("Failed to Save");
+    //             }
+    //         },
+    //         error: function(xhr, text, errorScript){
+    //             console.log("Failure attempting to save changes.");
+    //             console.log(text);
+    //             console.log(errorScript);
+    //             activate_all();
+    //             $("#input_save_changes").text("Error");
+    //         }
+    //     });
+    // });
 });
