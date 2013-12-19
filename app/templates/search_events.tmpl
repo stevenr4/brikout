@@ -1,0 +1,22 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+{% endblock %}
+
+
+{% block content %}
+
+	<div>
+		{% for event in event_list %}
+			<div class="my_container">
+				<h3><a href="{% url 'app.views.view_event' event_id=event.id %}">{{ event.title }}</a></h3><br>
+				<p>Game: {{ event.game.name }}    System: {{ event.system.name }}<br>
+				{{ event.scheduled_time }}<br></p>
+				Attending: {{ event.attendees.all|length }}<br>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock %}

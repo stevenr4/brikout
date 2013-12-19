@@ -1,0 +1,13 @@
+
+
+
+
+{% if user.event_invites_received.all|length >= 1 %}
+	<li><a href="{% url 'app.views.notifications' %}"><div class="my_notification">{{ user.event_invites_received.all|length }}</div></a></li>
+{% endif %}
+<li><a href="{% url 'app.views.profile' %}">
+<img src="http://placehold.it/40x40" style="margin:0 10 0 0; height:22px; width:22px;"> 
+{{ user.username }}</a></li>
+<li><a href="{% url 'app.views.main' %}">Home</a></li>
+<li><a href="{% url 'app.views.search_users' %}">Find Buddies</a></li>
+<li><a href="{% url 'app.views.logout' %}">logout</a></li>

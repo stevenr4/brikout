@@ -1,0 +1,49 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_inner_css %}
+#input_hour {
+	width:80%;
+}
+{% endblock %}
+
+{% block extra_js %}
+<script type="text/javascript" src="{% static 'js/create_event.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+	<div class="my_container">
+		<h3>Create an Event</h3>
+		<sub><span id="output_message"></span></sub><br><br>
+		<input type="text" id="input_title" placeholder="Title of the Event"></input><br>
+		System: <select id="input_system">
+			<option value="any">Any System</option>
+			{% for s in list_of_systems %}
+			<option value="{{s.id}}">{{s.name}}</option>
+			{% endfor %}
+		</select><br>
+		Game: <select id="input_game">
+			<option value="any">Any Game</option>
+		</select><br>
+
+		Date: <select id="input_month"></select><select id="input_day"></select><select id="input_year"></select><br>
+		Time: <span id="output_hour"></span>  <input id="input_hour" type="range" min="0" max="95" list="input_hour_data">
+		<datalist id="input_hour_data">
+		</datalist>
+		<br>
+		<textarea rows="4" cols="40" id="input_description" placeholder="Describe the event"></textarea><br>
+
+		<input type="checkbox" checked="checked" id="input_private"> Private Event<br>
+		<input type="checkbox" checked="checked" id="input_invite_only"> Invite Only<br>
+		<input type="checkbox" id="input_in_person"> In Person<br>
+		<span id="input_where_wrapper" class="wide"><textarea rows="4" cols="40" id="input_where" placeholder="Describe where it will take place."></textarea></span><br>
+		Invite your buddies:<div id="input_buddies_wrapper"></div>
+
+		<br><br>
+		<button id="input_submit">Create the Event</button>  <a href="{% url 'app.views.main' %}">cancel</a>
+	</div>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+
+
+{% if user.is_authenticated %}
+<div class="my_container">
+	<h3>Navigation</h3>
+	<ul class="nav nav-tabs nav-stacked">
+		<li><a href="{% url 'app.views.main' %}">Main page</a></li>
+		{% if user.is_authenticated %}<li><a href="{% url 'app.views.profile' %}">{{ user.username }}</a></li>{% endif %}
+		<li><a href="{% url 'app.views.search_users' %}">Search for Buddies</a></li>
+		<li><a href="{% url 'app.views.create_event' %}">Create Event</a></li>
+		<li><a href="{% url 'app.views.search_events' %}">Search for Events</a></li>
+		<li><a href="{% url 'app.views.search_games' %}">Search for Games</a></li>
+		<li><a href="{% url 'app.views.search_systems' %}">Search for Systems</a></li>
+	</ul>
+</div>
+{% else %}
+{% endif %}

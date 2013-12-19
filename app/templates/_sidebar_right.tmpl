@@ -1,0 +1,45 @@
+
+
+{% if user.is_authenticated %}
+
+	<div class="my_container">
+		<h3>Upcoming Events</h3>
+		<ul class="nav nav-tabs nav-stacked">
+			{% if user.events_attending.all %}
+				{% for e in user.events_attending.all|dictsort:"scheduled_time"|slice:":2" %}
+					<li>
+						<a href="{% url 'app.views.view_event' e.id %}">{{ e.title }}<br>{{ e.scheduled_time.month }}/{{ e.scheduled_time.day }}/{{ e.scheduled_time.year }}</a>
+					</li>
+				{% endfor %}
+				<li><a href="{% url 'app.views.search_events' %}">Search for Events</a></li>
+			{% else %}
+				You have no upcoming events<br>Why don't you try <a href="{% url 'app.views.search_events' %}">searching</a> for some?
+			{% endif %}
+
+		</ul>
+	</div>
+	<br>
+
+	<div class="my_container">
+		<h3>Your buddies</h3>
+		<ul class="nav nav-tabs nav-stacked">
+			{% if user.ext.buddies.all %}
+				{% for ue in user.ext.buddies.all|slice:":5" %}
+					<li>
+						<a href="{% url 'app.views.profile' ue.user.id %}"><img src="https://graph.facebook.com/1/picture" width="20px" height="auto"><br>{{ ue.user.username }}<br></a>
+					</li>
+				{% endfor %}
+				{% if user.ext.buddies.all|length > 5 %}
+					<li><a href="{% url 'app.views.search_users' %}?buddy_id={{ user.id }}">+ more +</a></li>
+				{% endif %}
+				<li><a href="{% url 'app.views.search_users' %}">Search for Buddies</a></li>
+			{% else %}
+				You have no buddies.<br>Why don't you try <a href="{% url 'app.views.search_users' %}">searching</a> for some?
+			{% endif %}
+		</ul>
+	</div>
+
+	
+{% else %}
+	Login to view friends!!!
+{% endif %}

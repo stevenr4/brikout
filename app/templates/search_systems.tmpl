@@ -1,0 +1,52 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/imports/jquery.tablesorter.js' %}"></script>
+<script src="{% static 'js/search_systems.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+	<div class="my_container">
+		<h3>Search for a System</h3>
+		
+
+		<table id="output_systems_table" style="width:100%;">
+			<thead>
+				<tr>
+					<th>Name</th>
+					<th>Rating</th>
+					<th>Library Size</th>
+				</tr>
+			</thead>
+			<tbody>
+				{% for s in all_systems %}
+				<tr>
+					<td><a href="{% url 'app.views.view_system' s.id %}">{{ s.name }}</a></td>
+					<td>{% if s.rating %}
+							{{ s.rating|floatformat:1 }}
+						{% else %}
+							n/a
+						{% endif %}
+					</td>
+					<td>{% if s.games.all|length < 50 %}
+							Tiny
+						{% elif s.games.all|length < 300 %}
+							Small
+						{% elif s.games.all|length < 1000 %}
+							Medium
+						{% else %}
+							Large
+						{% endif %}
+					</td>
+				</tr>
+				{% endfor %}
+			</tbody>
+		</table>
+
+	</div>
+
+{% endblock %}

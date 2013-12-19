@@ -1,0 +1,51 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+<script>
+system_id = {{ system.id }}
+</script>
+<script src="{% static 'js/view_system.js' %}"></script>
+
+{% endblock %}
+
+
+{% block content %}
+
+	<div class="my_container">
+		<h3>{{ system.name }}</h3>
+		<p>{{ system.overview }}</p><br>
+		Rating: 
+		{% if system.rating %}
+			{{ system.rating }}
+		{% else %}
+			N/A
+		{% endif %}<br>
+		Games Library: <a href="{% url 'app.views.search_games' %}?system_id={{ system.id }}&advanced=true">{{ system.games.all|length }}</a><br>
+		Maximum Controllers: {% if system.max_controllers %}
+			{{ system.max_controllers }}
+		{% else %}
+			N/A
+		{% endif %}<br>
+		This system is being used in <a href="{% url 'app.views.search_events' %}?system_id={{ system.id }}">{{ system.events.all|length }}</a> events.<br>
+		<a href="{% url 'app.views.search_users' %}?system_id={{ system.id }}">{{ system.users.all|length }}</a> users claim to own this system.<br>
+		<ul>
+		{% for ue in system.users.all|slice:":5" %}
+			<li><a href="{% url 'app.views.profile' ue.user.id %}">{{ ue.user.username }}</a></li>
+		{% endfor %}{% if system.users.all|length > 5 %}
+			<li><a href="{% url 'app.views.search_users' %}?system_id={{ system.id }}">+ more +</a></li>
+		{% endif %}</ul><br>
+		
+
+		<br><br>
+		<span id="user_status">
+			{% if system in user.ext.systems.all %}
+				You claim to own this system. <button id="input_disown">Disown this system!</button>
+			{% else %}
+				<button id="input_claim">I own this system.</button>
+			{% endif %}
+		</span>
+	</div>
+
+{% endblock %}

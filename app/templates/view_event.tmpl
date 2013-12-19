@@ -1,0 +1,66 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+<script>
+var event_id = {{ event.id }}
+</script>
+<script src="{% static 'js/view_event.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+	<div class="my_container">
+		<h2>{{ event.title }}</h2>
+		<h5>Host: <a href="{% url 'app.views.profile' event.owner.id %}">{{ event.owner.username }}</a></h5>
+		<p>System: {% if event.system_is_any %}Any-System{% else %}<a href="{% url 'app.views.view_system' event.system.id %}">{{ event.system.name }}</a>{% endif %}  -  Game: {% if event.game_is_any %}Any-Game{% else %}<a href="{% url 'app.views.view_game' event.game.id %}">{{ event.game.name }}</a>{% endif %}</p><br>
+
+		Date Time: {{ event.scheduled_time }}<br>
+		Description: {{ event.description }}
+
+		Private Event: {{ event.private }}<br>
+		Invite Only: {{ event.invite_only }}<br>
+		In Person: {{ event.in_person }}<br>
+		{% if event.in_person %}
+			Where: {{ event.where }}<br>
+		{% endif %}
+
+		Attending: <a href="{% url 'app.views.search_users' %}?event_id={{ event.id }}">{{ event.attendees.all|length }}</a><br>
+		<button id="input_invite_buddies">Invite Your Buddies!</button><br>
+		<span id="input_invite_buddies_wrapper"><img src="{% static "images/loading-purple.gif" %}" width="30px" height="auto"></span>
+
+		<br><br>
+		<span id="user_status">
+			{% if event in user.events_started.all %}
+				You are the owner of this event.
+				{% if user in event.attendees.all %}
+					<br> You are also currently attending this event. 
+					<button id="input_leave">Leave event</button></br>
+				{% else %}
+					<br> You are not currently attending this event. 
+					<button id="input_attend">Attend this event.</button> </br>
+				{% endif %}
+			{% elif event in user.events_attending.all %}
+				You are currently attending this event. <button id="input_leave">Leave event</button>
+			{% else %}
+				{% if invited %}
+					<button id="input_attend">Accept invite</button>
+				{% elif event.invite_only %}
+					You cannot attend this event unless you are invited.
+				{% else %}
+					<button id="input_attend">Attend this event</button>
+				{% endif %}
+			{% endif %}
+		</span>
+	</div>
+
+{% endblock %}
+
+
+
+
+
+
+

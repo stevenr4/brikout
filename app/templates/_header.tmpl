@@ -1,0 +1,21 @@
+{% load staticfiles %}
+	      <div class="navbar navbar-default navbar-inverse navbar-fixed-top dimmed" role="navigation">
+	        <div class="navbar-header">
+	          <a href="{% url 'app.views.main' %}" class="navbar-brand" style="padding: 2px 0 0 30px"><img src="{% static 'images/0000.png' %}" height="60px" width="auto"></a>
+	        </div>
+	        <div class="navbar-collapse collapse">
+	          <ul class="nav navbar-nav navbar-right">
+	          	
+				{% if user.is_authenticated %}
+					{% include '_header_user_info.tmpl' %}
+				{% else %}
+					{% include '_header_no_user.tmpl' %}
+				{% endif %}
+	          </ul>
+	        </div><!--/.nav-collapse -->
+	      </div>
+
+
+
+<div id="header_user_info" class="my_container">
+</div>

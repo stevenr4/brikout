@@ -1,0 +1,19 @@
+{% extends '_base.tmpl' %}
+
+{% block title %}
+BRIKOUT
+{% endblock %}
+
+{% block content %}
+
+	<div class="my_container">
+		<h2>News Feed</h2>
+		{% for n in news %}
+		<div class="my_inner_container">
+			<a href="{{n.url}}"><h4>{{ n.title }}</h4></a>
+			<p>{{ n.text|safe }}</p>
+		</div>
+		{% endfor %}
+	</div>
+
+{% endblock %}

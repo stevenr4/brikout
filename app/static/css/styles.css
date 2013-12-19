@@ -1,0 +1,145 @@
+/* Styles for my application */
+
+
+
+
+html{
+	height: 100%;
+	background: #000 url(../images/v-8.png) repeat top center fixed;
+	color: white;
+}
+
+
+body{
+	width: 1080px;
+	margin: 10px auto;
+	background-color: rgba(18,0,29,0);
+	color: white;
+}
+
+h1,h2,h3,h4,h5,h6{
+	color: #9948CD;
+}
+
+
+#body_content{
+	overflow: auto;
+	width: 100%;
+}
+
+#header{
+	top: 0px;
+	left: 0px;
+	width: 100%;
+	height: 100px;
+	/*background-color: rgba(255,0,255,0.5);*/
+}
+
+#header #header_navbar{
+	float: left;
+}
+
+#header #header_user_info{
+	float: right;
+	/*background-color: rgba(255,255,0,0.5);*/
+}
+
+#header #header_user_info a{
+	margin-right: 10px;
+}
+
+#sidebar_left{
+	float:left;
+	padding: 0 10px 0 0;
+	width: 150px;
+	height: 100%;
+	/*background-color: rgba(255,2,2,0.5);*/
+}
+
+#sidebar_right{
+	float:right;
+	padding: 0 0 0 10px;
+	width: 180px;
+	/*background-color: rgba(2,255,2,0.5);*/
+}
+
+#content{
+	float:left;
+	width: 750px;
+	/*background-color: rgba(2,2,255,0.5);*/
+}
+
+#footer{
+	text-align: center;
+	clear: both;
+	height: 60px;
+	width: 980px;
+
+}
+
+.my_notification {
+	float: left;
+	padding: 0 3px;
+	margin: 0 5px;
+	color: white;
+	background: red;
+
+	border-radius:3px;
+}
+
+
+
+.my_container{
+	border:0 solid #888;
+	background-color: rgba(54,0,88,0.7);
+	border-radius:15px;
+	padding: 10px;
+}
+
+.my_inner_container{
+	border:0 solid #888;
+	background-color: rgba(27,0,44,0.4);
+	border-radius: 5px;
+	padding: 10px;
+}
+
+.left{
+	float:left;
+}
+.right{
+	float:right;
+}
+
+.vertical_divider{
+	width:0px;
+	height:80%;
+}
+
+.login_container{ 
+	text-align: center;
+	padding: 20px;
+}
+
+.floater{
+	width: 200px;
+	float: left;
+	margin: 10px;
+	height: 300px;
+}
+
+.floater_container{
+	border: 0px solid #000000;
+	overflow: auto;
+	width: 100%
+}
+
+label {
+	width: 80px;
+	display: inline-block;
+	text-align: right;
+	padding: 0 10px;
+}
+
+a{
+	color: #CCAAEE;	
+}

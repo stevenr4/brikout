@@ -1,0 +1,169 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/imports/jquery.tablesorter.js' %}"></script>
+<script>
+	var advanced_search = {% if advanced_search %}true{% else %}false{%endif%};
+	var page_number = {{page_number}};
+	var page_size = {{page_size}};
+    var page_total = {{page_total}};
+	var total_games = {{total_games}};
+	var name='{{name}}';
+	var system_id={{system_id}};
+	var genre='{{genre}}';
+	var esrb='{{esrb}}';
+	var coop='{{coop}}';
+	var sort_by='{{sort_by}}';
+</script>
+<script src="{% static 'js/search_games.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+	<div class="my_container">
+		<h3>Search for Games</h3> 
+		<input type="text" id="input_name" placeholder="Game Title"><br>
+		<input type="checkbox" id="input_advanced"> Advanced Search<br>
+		<div id="input_advanced_wrapper">
+
+			<label>System: </label><select id="input_system">
+						<option value='0'>Any System</option>
+						{% for s in list_of_systems %}
+							<option value='{{ s.id }}'>{{ s.name }}</option>
+						{% endfor %}
+					</select><br>
+			<label>Genre: </label><select id="input_genre">
+						<option value='any'>Any Genre</option>
+						{% for g in list_of_genres %}
+							<option value='{{ g.name }}'>{{ g.name }}</option>
+						{% endfor %}
+					</select><br>
+			<label>ESRB: </label><select id="input_esrb">
+						<option value='any'>Any Rating</option>
+						{% for e in list_of_esrb %}
+							<option value='{{ e.code }}'>{{ e.code }}</option>
+						{% endfor %}
+					</select><br>
+			<label>Co-op: </label><select id="input_coop">
+						<option value='either'>Either</option>
+						<option value='yes'>Yes</option>
+						<option value='no'>No</option>
+					</select><br>
+			<label>Sort by: </label><select id="input_sort">
+						<option value='title'>Title</option>
+						<option value='popularity'>Popularity</option>
+						<option value='release_date'>Release Date</option>
+						<option value='max_players'>Maximum Players</option>
+						<option value='rating'>Rating</option>
+					</select><br>
+		</div>
+		<label>Results per page: </label><select id="input_page_size">
+			<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="40">40</option>
+			<option value="80">80</option>
+			<option value="160">160</option>
+		</select>
+		<button id="input_submit">Search</button>
+		<br>
+		{% if list_of_games %}
+			Showing {{ list_of_games|length }} / {{ total_games }}<br> 
+			Page {% if page_number > 1 %}<a id="input_first_page">First Page</a> <a id="input_prev_page">Prev. Page</a>{% endif %} {{ page_number }} / {{ page_total }} {% if page_number < page_total %}<a id="input_next_page">Next Page</a> <a id="input_last_page">Last Page</a>{% endif %}<br>
+			<div class="floater_container">
+				{% for g in list_of_games %}
+					<div class="floater my_inner_container">
+						<div class="floater_container">
+								<a href="{% url 'app.views.view_game' g.id %}"><img src="http://thegamesdb.net/banners/{{ g.url_image_cover }}" height="80px" width="auto" class="left">
+								{{ g.name }}</a>
+						</div>
+						
+						ESRB: {% if g.esrb %}{{ g.esrb.code }}{% else %}n/a{% endif %}<br>
+						Rating: {% if g.rating %}{{ g.rating|floatformat:1 }}{% else %}n/a{% endif %}<br>
+						Genres: {% for genre in g.genres.all %}{{ genre.name }}{% empty %}n/a{% endfor %}<br>
+						Players: {% if g.max_players %}{{ g.max_players }}{% else %}n/a{% endif %}<br>
+						Coop: {% if g.coop == None %}n/a{% else %}{% if g.coop %}Yes{% else %}No{% endif %}{% endif %}<br>
+						Release Date: {% if g.release_date %}{{ g.release_date }}{% else %}n/a{% endif %}<br>
+						Users: {{ g.users.all|length }}
+
+					</div>
+				{% endfor %}
+			</div>
+			<clear>
+			<!-- <table id="output_systems_table" style="width:100%;">
+				<thead>
+					<tr>
+						<th>Title</th>
+						<th>ESRB</th>
+						<th>Rating</th>
+						<th>Genres</th>
+						<th>Maximum Players</th>
+						<th>Co-op</th>
+						<th>Release Date</th>
+						<th>Users</th>
+						<th>Image</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for g in list_of_games %}
+						<tr>
+							<td><a href="{% url 'app.views.view_game' g.id %}">{{ g.name }}</a></td>
+							<td>
+								{% if g.esrb %}
+									{{ g.esrb.code }}
+								{% else %}
+									n/a
+								{% endif %}
+							</td>
+							<td>{% if g.rating %}
+									{{ g.rating|floatformat:1 }}
+								{% else %}
+									n/a
+								{% endif %}
+							</td>
+							<td>
+								{% for genre in g.genres.all %}
+								{{ genre.name }}<br>
+								{% empty %}
+								n/a
+								{% endfor %}
+							</td>
+							<td>
+								{% if g.max_players %}
+									{{ g.max_players }}
+								{% else %}
+									n/a
+								{% endif %}
+							</td>
+							<td>
+								{% if g.coop == None %}
+									n/a
+								{% else %}
+									{% if g.coop %}Yes{% else %}No{% endif %}
+								{% endif %}
+							</td>
+							<td>
+								{% if g.release_date %}
+								{{ g.release_date }}
+								{% else %}
+								n/a
+								{% endif %}
+							</td>
+							<td>
+								{{ g.users.all|length }}
+							</td>
+							<td>
+								<img src="http://thegamesdb.net/banners/{{ g.url_image_cover }}" height="100px" width="auto">
+							</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>-->
+		{% endif %}
+
+	</div>
+
+{% endblock %}

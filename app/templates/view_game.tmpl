@@ -1,0 +1,59 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+<script>
+game_id = {{ game.id }}
+</script>
+<script src="{% static 'js/view_game.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+
+	<div class="my_container">
+		<img src="http://thegamesdb.net/banners/{{ game.url_image_cover }}" height="200px" width="auto" style="float:right; margin: 20px">
+		<h3>{{ game.name }}</h3>
+		<h4>Overview</h4> {% if game.overview %}{{ game.overview }}{% else %}No Overview Available{% endif %}<br><br>
+		System: {% for s in game.systems.all %}
+		<a href="{% url 'app.views.view_system' s.id %}">{{ s.name }}</a>
+		{% endfor %}<br>
+		ESRB: 
+		{% if game.esrb %}
+			{{ game.esrb.code }} - {{ game.esrb.text }}
+		{% else %}
+			N/A
+		{% endif %}<br>
+		Genres:
+		{% if game.genres %}
+
+			<ul>
+				{% for g in game.genres.all %}
+					<li>
+						{{ g.name }}
+					</li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			N/A<br>
+		{% endif %}
+		Release Date: {% if game.release_date %}{{game.release_date}}{% else %}N/A{% endif %}<br>
+		Rating: {% if game.rating %}{{ game.rating|floatformat:1 }}{% else %}N/A{% endif %}<br>
+		Maximum Players: {% if game.max_players %}{{ game.max_players }}{% else %}N/A{% endif %}<br>
+		Co-operative: {% if game.coop == None %}N/A{% elif game.coop %}Yes{% else %}No{% endif %}<br><br>
+		This game is being played in <a href="{% url 'app.views.search_events' %}?game_id={{ game.id }}">{{ game.events.all|length }}</a> events.<br>
+		Players who claim to own this game: <a href="{% url 'app.views.search_users' %}?game_id={{ game.id }}">{{ game.users.all|length }}</a><br>
+
+
+		<br><br>
+		<span id="user_status">
+			{% if game in user.ext.games.all %}
+				You claim to own this game. <button id="input_disown">Disown this game!</button>
+			{% else %}
+				<button id="input_claim">I own this game.</button> <a href="http://www.amazon.com/s/?field-keywords={{ game.name }} {% for s in game.systems.all %}{{s.name}}{% endfor %}">Buy this game</a>
+			{% endif %}
+		</span>
+	</div>
+
+{% endblock %}

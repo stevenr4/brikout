@@ -1,0 +1,54 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+
+{% block extra_js %}
+<script src="{% static 'js/imports/jquery.tablesorter.js' %}"></script>
+
+<script>
+	var name='{{name}}';
+</script>
+
+<script src="{% static 'js/search_users.js' %}"></script>
+{% endblock %}
+
+
+
+{% block content %}
+
+	<div class="my_container">
+		<h3>Buddies</h3>{{advanced_search}}
+		<input type="text" id="input_name" placeholder="Username">
+		<button id="input_submit">Search</button>
+		<br>
+		{% if list_of_users %}
+		Showing {{ list_of_users|length }} / {{ total_users }}<br> 
+			<table id="output_users_table" style="width:100%;">
+				<thead>
+					<tr>
+						<th>Username</th>
+						<th>Xbox</th>
+						<th>PSN</th>
+						<th>Steam</th>
+						<th>Systems</th>
+						<th>Games</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for u in list_of_users %}
+						<tr>
+							<td><a href="{% url 'app.views.profile' u.id %}"><img src="http://graph.facebook.com/1/picture" width="30" height="auto"> {{u.username}}</a></td>
+							<td>{% if u.ext.user_xbox %}{{u.ext.user_xbox}}{% else %}n/a{% endif %}</td>
+							<td>{% if u.ext.user_psn %}{{u.ext.user_psn}}{% else %}n/a{% endif %}</td>
+							<td>{% if u.ext.user_steam %}{{u.ext.user_steam}}{% else %}n/a{% endif %}</td>
+							<td>{{ u.ext.systems.all|length }}</td>
+							<td>{{ u.ext.games.all|length }}</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		{% endif %}
+
+	</div>
+
+{% endblock %}

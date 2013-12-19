@@ -1,0 +1,36 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+{% block title %}
+Login to continue.
+{% endblock %}
+
+{% block extra_js %}
+	<script type="text/javascript" src="{% static 'js/login.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+	{% csrf_token %}
+	<div class="my_container">
+		<div class="login_container">
+			<h3>Login</h3>
+			<sub><span id="form_error_message"></span></sub><br><br>
+	        <input id="input_username" type="text" placeholder="Username"><span id="input_username_span"></span><br>
+	        <input id="input_password" type="password" placeholder="Password"><span id="input_password_span"></span><br>
+	        <div id="input_signup_extra">
+	        	<input id="input_password_confirm" type="password" placeholder="Confirm Password"><span id="input_password_confirm_span"></span><br>
+	        	<input id="input_email" type="email" placeholder="Email"><span id="input_email_span"></span><br>
+	        </div>
+	        <br>
+	        <input type="submit" value="Login" id="input_login"/>
+	        <input type="submit" value="Sign-Up" id="input_signup"
+		</div>
+	</div>
+{% endblock %}
+
+{% block sidebar_left %}
+{% endblock %}
+
+{% block sidebar_right %}
+{% endblock %}
+

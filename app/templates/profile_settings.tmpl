@@ -1,0 +1,62 @@
+{% extends '_base.tmpl' %}
+
+{% block title %}
+{{ profile_user.username }}'s Profile
+{% endblock %}
+
+{% block content %}
+	<div class="my_container">
+		<h2><img src="http://placehold.it/40x40">{{ profile_user.username }}</h2>
+	</div><br>
+	<div class="my_container">
+		<p>
+			Username: {{ profile_user.username }}<br>
+			Name: {{ profile_user.first_name }} {{ profile_user.last_name }}<br>
+			Email: {{ profile_user.email }}<br>
+			Last Logged on: {{ profile_user.last_login }}<br>
+			Bio: {{ profile_user.ext.bio }}
+			<br>
+			Games:
+			<ul>
+				{% if profile_user.ext.games.all %}
+					{% for g in profile_user.ext.games.all %}
+						<li>{{ g.name }}
+						</li>
+					{% endfor %}
+				{% else %}
+					This user has no posted games.
+				{% endif %}
+			</ul>
+			Systems:
+			<ul>
+				{% if profile_user.ext.systems.all %}
+					{% for s in profile_user.ext.systems.all %}
+						<li>{{ s.name }}
+						</li>
+					{% endfor %}
+				{% else %}
+					This user has no posted systems.
+				{% endif %}
+			</ul>
+			Buddies:
+			<ul>
+				{% if profile_user.ext.buddies.all %}
+					{% for u in profile_user.ext.buddies.all %}
+						<li>{{ u.user.username }}
+						</li>
+					{% endfor %}
+				{% else %}
+					{% if user.id == profile_user.id %}
+						You do not have any buddies yet.
+						Go ahead and <a href="">invite</a> some buddies!
+					{% else %}
+						This user has yet to add buddies.<br>
+						Be the first to <a href="">add</a> this player to your buddies list!
+					{% endif %}
+				{% endif %}
+			</ul>
+		</p>
+	</div>
+
+
+{% endblock %}

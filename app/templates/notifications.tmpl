@@ -1,0 +1,25 @@
+{% extends '_base.tmpl' %}
+
+{% block title %}
+BRIKOUT
+{% endblock %}
+
+{% block content %}
+
+	<div class="my_container">
+		<h3>Notifications</h3>
+		{% if user.event_invites_received.all|length > 0 %}
+			You have been invited to {{ user.event_invites_received.all|length }} events:
+			<ul>
+				{% for ei in user.event_invites_received.all %}
+				<li><a href="{% url 'app.views.view_event' ei.event.id %}">{{ ei.requester.username }} invited you to {{ ei.event.title }}</a></li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			No new events.<br>
+		{% endif %}
+
+		
+	</div>
+
+{% endblock %}

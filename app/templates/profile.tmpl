@@ -1,0 +1,128 @@
+{% extends '_base.tmpl' %}
+{% load staticfiles %}
+
+{% block title %}
+{{ profile_user.username }}'s Profile
+{% endblock %}
+
+
+{% block extra_js %}
+<script>
+	var user_id={{ user.id }};
+	var profile_id = {{ profile_user.id }};
+</script>
+<script src="{% static 'js/profile.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+	<div class="my_container">
+		<h2><img src="http://placehold.it/40x40"> {{ profile_user.username }}</h2>
+		<div class="">
+			{% if profile_user.id == user.id %}
+			{% else %}
+				{% if user.is_authenticated %}
+					{% if profile_user.ext in user.ext.buddies.all %}
+						{{ profile_user.username }} is your buddy. <button id="input_remove_buddy">Un-Buddy</button>
+					{% else %}
+						<button id="input_add_buddy">Ask {{ profile_user.username }} to be your Buddy!</button>
+					{% endif %}
+				{% else %}
+					<a href="{% url 'app.views.login' %}">Login to add this user to your buddies list!</a>
+				{% endif %}
+			{% endif %}
+		</div>
+	</div><br>
+	<div class="my_container">
+		<p>
+			Name: 
+			{% if profile_user.id == user.id %}
+				<span id="output_edit_name_wrapper">{{ profile_user.first_name }} {{ profile_user.last_name }}
+				</span>
+				<span id="input_edit_name_wrapper">
+					<input type="text" placeholder="First Name" id="input_first_name" maxlength="20" value="{{ profile_user.first_name }}"> 
+					<input type="text" placeholder="Last Name" id="input_last_name" maxlength="20" value="{{ profile_user.last_name }}">
+				</span>
+				<button id="input_edit_name">Edit Username</button><br>
+			{% else %}
+				{{ profile_user.first_name }} {{ profile_user.last_name }}
+			{% endif %}<br>
+
+			Email: 
+			{% if profile_user.id == user.id %}
+				<input type="email" size="60" placeholder="email" id="input_email" value="{{ profile_user.email }}"><br>
+			{% else %}
+				{{ profile_user.email }}
+			{% endif %}<br>
+			
+			Last Logged on: {{ profile_user.last_login }}<br>
+			
+			Bio: 
+			{% if profile_user.id == user.id %}
+				<textarea cols="60" rows="5" id="input_bio" maxlength="500">{{ profile_user.ext.bio }}</textarea>  
+				<button id="input_save_changes">Save All Changes</button><br>
+			{% else %}
+				{{ profile_user.ext.bio }}
+			{% endif %}<br><br>
+
+			This user is attending <a href="{% url 'app.views.search_events' %}?user_id={{ profile_user.id }}">{{ profile_user.events_attending.all|length }}</a> events.<br>
+			<br>
+			Games: {{ profile_user.ext.games.all|length }} {% if profile_user.id == user.id %}<a href="{% url 'app.views.search_games' %}">Search for Games to claim</a>{% endif %}
+			<ul>
+				{% if profile_user.ext.games.all %}
+					{% for g in profile_user.ext.games.all|slice:":10" %}
+						<li>{% if profile_user.id == user.id %}
+							<span id="span_remove_game_id{{ g.id }}">
+								<a id="input_remove_game_id{{ g.id }}" class="input_remove_game">[disown]</a>
+							</span>
+							 - 
+							{% endif %}
+							<a href="{% url 'app.views.view_game' g.id %}">{{ g.name }}</a>
+						</li>
+					{% endfor %}
+					{% if profile_user.ext.games.all|length > 10 %}
+					<li><a href="{% url 'app.views.search_games' %}">+ more +</a></li>
+					{% endif %}
+				{% else %}
+					This user has no posted games.
+				{% endif %}
+			</ul>
+			Systems: {{ profile_user.ext.systems.all|length }} {% if profile_user.id == user.id %}<a href="{% url 'app.views.search_systems' %}">Search for Systems to claim</a>{% endif %}
+			<ul>
+				{% if profile_user.ext.systems.all %}
+					{% for s in profile_user.ext.systems.all|slice:":10" %}
+						<li><a href="{% url 'app.views.view_system' s.id %}">{{ s.name }}</a>
+						</li>
+					{% endfor %}
+					{% if profile_user.ext.systems.all|length > 10 %}
+					<li><a href="{% url 'app.views.search_users' %}">+ more +</a></li>
+					{% endif %}
+				{% else %}
+					This user has no posted systems.
+				{% endif %}
+			</ul>
+			Buddies: {{ profile_user.ext.buddies.all|length }}
+			<ul>
+				{% if profile_user.ext.buddies.all %}
+					{% for u in profile_user.ext.buddies.all|slice:":5" %}
+						<li><a href="{% url 'app.views.profile' u.user.id %}">{{ u.user.username }}</a>
+						</li>
+					{% endfor %}
+					{% if profile_user.ext.buddies.all|length >= 5 %}
+					<li><a href="{% url 'app.views.search_users' %}?buddy_id={{ profile_user.id }}">+ more +</a></li>
+					{% endif %}
+				{% else %}
+					{% if user.id == profile_user.id %}
+						You do not have any buddies yet.
+						Go ahead and <a href="{% url 'app.views.search_users' %}">search</a> for some buddies!
+					{% else %}
+						This user has yet to add buddies.<br>
+						Be the first to <button id="input_add_buddy">ask {{ profile_user.username }} to be your Buddy!</button>
+					{% endif %}
+				{% endif %}
+			</ul>
+		</p>
+	</div>
+
+
+{% endblock %}
