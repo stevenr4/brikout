@@ -1845,7 +1845,7 @@ def api_call_games(request):
 
 		# We can overwrite this with a GET parameter
 		if 'amount' in request.GET:
-			amount = int(request.GET)
+			amount = int(request.GET['amount'])
 
 
 		# Go through all the systems, we will need them to get the games list for that system
