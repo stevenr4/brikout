@@ -61,8 +61,8 @@ ROOT_URLCONF = 'brikout_v1.urls'
 WSGI_APPLICATION = 'brikout_v1.wsgi.application'
 
 
-# # Database
-# # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
+# Database
+# https://docs.djangoproject.com/en/1.6/ref/settings/#databases
 
 # DATABASES = {
 #     'default': {
