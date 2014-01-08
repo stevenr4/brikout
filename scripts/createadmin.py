@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-print "Running scripts/createadmin.py"
+print "Running scripts/createadmin.py\n\n\n"
 
 from django.contrib.auth.models import User
 #from app.models import UserExtension
