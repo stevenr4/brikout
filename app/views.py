@@ -1920,11 +1920,11 @@ def api_call_games(request):
 					# There already is one in the database, let's get that one to update it
 					print system.name + " -We're getting duplicate data... : " + api_id + " - " + name
 					g = get_object_or_404(Game,api_id=api_id)
-					g.name = name
+					g.name = name.encode('utf8')
 				else:
 					# There wasn't a game in the database, let's create a new one with the api id and  name
-					print system.name + " -             -------------------      Creating game to save: " + api_id + " - " + name
-					g = Game(name=name,api_id=api_id)
+					print system.name + " -             -------------------      Creating game to save: " + api_id + " - " + name.encode('utf8')
+					g = Game(name=name.encode('utf8'),api_id=api_id)
 					g.save()
 					system.games.add(g)
 
@@ -2142,7 +2142,7 @@ def api_call_ign_rss_feed(request):
 	# version
 	# entries
 	# namespaces
-	print feed_data
+	#print feed_data
 
 	for entry in feed_data.entries:
 		print "Next entry..."
@@ -2168,11 +2168,11 @@ def api_call_ign_rss_feed(request):
 			print "Getting duplicate data, not saving..."
 			pass
 		else:
-			print "Putting new feed in data! " + entry.title
+			print "Putting new feed in data! " + entry.title.encode('utf8')
 			n = News(
-				title = entry.title,
-				url = entry.link,
-				text = entry.content[0].value,
+				title = entry.title.encode('utf8'),
+				url = entry.link.encode('utf8'),
+				text = entry.content[0].value.encode('utf8'),
 				# >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ADD A DATE HERE
 				)
 			n.save()
