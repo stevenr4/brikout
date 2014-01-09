@@ -1776,11 +1776,11 @@ def api_call_systems(request):
 
 			# We get the api_id from the platform, because this is what we need if we want more info
 			print "NEXT"
-			api_id = platform.find('id').contents[0]
+			api_id = platform.find('id').contents[0].encode('utf8')
 			print api_id
 
 			# Now we get the name of the system
-			name = platform.find('name').contents[0]
+			name = platform.find('name').contents[0].encode('utf8')
 			print name
 
 			# This is so we can assign a system in an if-statement and use it after
@@ -1817,14 +1817,16 @@ def api_call_systems(request):
 				print "This platform doesn't have an overview.."
 			else:
 				print "This platform has an overview!"
-				s.overview = platform_data.find('overview').contents[0]
+				s.overview = platform_data.find('overview').contents[0].encode('utf8')
+				print s.overview
 				
 			# Now we check for a rating if it's in our system.
 			if platform_data.find('rating') is None:
 				print "This platform doesn't have a rating..."
 			else:
 				print "This platform has a rating!"
-				s.rating = platform_data.find('rating').contents[0]
+				s.rating = platform_data.find('rating').contents[0].encode('utf8')
+				print s.rating
 
 			# Last part of our FOR loop is to save the data.
 			s.save()
@@ -1887,9 +1889,9 @@ def api_call_games(request):
 				print "Progress: " + str(game_counter//182) + "%  " + ("....." + str(game_counter))[-5:] + "/18200 - |" + ("#" * (game_counter//250)) + ("." * ((18200 - game_counter)//250)) + '|'
 
 				# Find the id and save it
-				api_id = game.find('id').contents[0]
+				api_id = game.find('id').contents[0].encode('utf8')
 				# Save the name (title) aswell
-				name = game.find('gametitle').contents[0]
+				name = game.find('gametitle').contents[0].encode('utf8')
 
 				# We create an empty game variable to save the data in an if-statement for later
 				g = Game()
