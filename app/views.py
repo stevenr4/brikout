@@ -1853,7 +1853,15 @@ def api_call_games(request):
 	# This is dangerous as anyone who knows this URL can activate this command
 	if request.method == 'GET':
 
+		# An integer to count the total amount of games
+		total_game_counter = 0
+		# An integer to know which system we are on
+		system_counter = 0
+		system_total = len(System.objects.all())
+
+		# An integer to know which game we are on (in the specific system)
 		game_counter = 0
+		game_total = 0
 
 		# This will be our default amount of games per system
 		amount = 5
@@ -1865,6 +1873,8 @@ def api_call_games(request):
 
 		# Go through all the systems, we will need them to get the games list for that system
 		for system in System.objects.all():
+
+			system_counter += 1
 
 			# Concatenate the URL to the final url
 			print "Calling thegamesdb.net for the games related to: " + system.name + " - api_id:" + system.api_id
@@ -1879,14 +1889,23 @@ def api_call_games(request):
 			# Get the soup of the response
 			soup = Soup(response)
 
+			game_counter = 0
+			game_total = len(soup.findAll({'game': True})[:amount])
 
 			# Now, we look for every single game in that response
 			for game in soup.findAll({'game': True})[:amount]:##############################################################################################
 
 				# This is just a counter to count the amount of games we've looped through
+				total_game_counter += 1
 				game_counter += 1
 				# This is just a user friendly loading bar
-				print "Progress: " + str(game_counter//182) + "%  " + ("....." + str(game_counter))[-5:] + "/18200 - |" + ("#" * (game_counter//250)) + ("." * ((18200 - game_counter)//250)) + '|'
+				# print "Progress: " + str(total_game_counter//182) + "%  " + ("....." + str(total_game_counter))[-5:] + "/18200 - |" + ("#" * (game_counter//250)) + ("." * ((18200 - game_counter)//250)) + '|'
+				print "Progress:"
+				print "Systems: " + str((system_counter * 100)//system_total) + "%"
+				print "|" + ("#" * system_counter) + ("." * (system_total - system_counter)) + '|'
+				print "Games in this system: " + str((game_counter * 100)//game_total) + "%"
+				print "|" + ("#" * (int(game_counter/float(game_total)) * 30)) + ("." * (int((game_total - game_counter)/float(game_total)) * 30)) + '|'
+
 
 				# Find the id and save it
 				api_id = game.find('id').contents[0].encode('utf8')
